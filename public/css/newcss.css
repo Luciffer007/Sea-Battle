@@ -19,7 +19,7 @@
 
 .not-checked {
     border: 1px solid black;
-    background: slategray;
+    background: slategray !important;
     cursor: pointer;
 }
 
@@ -27,7 +27,7 @@
     background: blue;      
 }
 
-.ship {
+div[ship] {
     border: 1px solid black;
     background-color: silver;
 }
