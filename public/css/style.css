@@ -27,7 +27,7 @@
     background: blue;      
 }
 
-div[ship] {
+.ship {
     border: 1px solid black;
     background-color: silver;
 }
