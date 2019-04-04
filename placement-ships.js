@@ -1,3 +1,5 @@
+const getRandomInt = require('./randomizer');
+
 /* Placement of ships on the field */
 function placementShips() {
     let battleField = [];
@@ -50,10 +52,6 @@ function placementShips() {
         }
     })
     return battleField;
-}
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function placementShip(ship,  battleField, rowIndex, columnIndex, indexShipBuffer, indexBuffer, rowCoef, columnCoef) {
