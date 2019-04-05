@@ -4,8 +4,9 @@ const getRandomInt = require('./randomizer');
 function placementShips() {
     let battleField = [];
     for (let i = 0; i < 10; i++) {
-        battleField[i] = new Array(10);
+        battleField[i] = new Array([,new Set()], [,new Set()], [,new Set()], [,new Set()], [,new Set()], [,new Set()], [,new Set()], [,new Set()], [,new Set()], [,new Set()]);
     }
+
     let ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
     let completeFlag;
     let rowIndex;
@@ -13,6 +14,7 @@ function placementShips() {
     let direction;
     let indexShipBuffer;
     let indexBuffer; //One-cell zone around the ship
+    let idCounter = 0;
 
     ships.forEach(function(ship) {
         completeFlag = false;
@@ -38,28 +40,36 @@ function placementShips() {
             }
 
             indexShipBuffer.forEach(function(indexShip) {
-                battleField[indexShip[0]][indexShip[1]] = 'ship';
+                battleField[indexShip[0]][indexShip[1]][0] = 'ship';
+                battleField[indexShip[0]][indexShip[1]][1] = idCounter;
             });
+
+            /* Filtering of unacceptable indexes */
             indexBuffer = indexBuffer.filter(function(indexArray) {
                 if ((indexArray[0] >= 0) && (indexArray[0] < 10) && (indexArray[1] >= 0) && (indexArray[1] < 10)) return true;
                 else return false;
             })
+
             indexBuffer.forEach(function(indexArray) {
-                if (battleField[indexArray[0]][indexArray[1]] != 'ship')
-                    battleField[indexArray[0]][indexArray[1]] = 'notTouch';
+                if (battleField[indexArray[0]][indexArray[1]][0] != 'ship')
+                {
+                    battleField[indexArray[0]][indexArray[1]][0] = 'notTouch';
+                    battleField[indexArray[0]][indexArray[1]][1].add(idCounter);
+                }
             });
             completeFlag = true;
         }
-    })
+        idCounter++;
+    });
     return battleField;
 }
 
-function placementShip(ship,  battleField, rowIndex, columnIndex, indexShipBuffer, indexBuffer, rowCoef, columnCoef) {
+function placementShip(typeShip,  battleField, rowIndex, columnIndex, indexShipBuffer, indexBuffer, rowCoef, columnCoef) {
     let cellBattleField;
 
-    for (let i = 0; i < ship; i++) {
+    for (let i = 0; i < typeShip; i++) {
         cellBattleField = battleField[rowIndex + i * rowCoef][columnIndex + i * columnCoef];
-        if (cellBattleField == 'ship' || cellBattleField == 'notTouch') return true;
+        if (cellBattleField[0] == 'ship' || cellBattleField[0] == 'notTouch') return true;
         indexShipBuffer.push([rowIndex + i * rowCoef, columnIndex + i * columnCoef]);
         getOneCellZone(indexBuffer, battleField, rowIndex + i * rowCoef, columnIndex + i * columnCoef);
     }
